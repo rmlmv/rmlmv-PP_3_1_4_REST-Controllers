@@ -3,6 +3,10 @@ package ru.kata.spring.boot_security.demo.models;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
@@ -16,24 +20,31 @@ public class User implements UserDetails, Comparable<User> {
     private Long id;
 
     @Column(name = "name")
+    @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
     private String firstName;
 
     @Column(name = "last_name")
+    @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
     private String lastName;
 
     @Column(name = "age")
+    @Min(value = 0, message = "Age should be greater than 0")
     private int age;
 
     @Column(name = "email")
+    @NotEmpty(message = "Email should not be empty")
+    @Email(message = "Email should be valid")
     private String email;
 
     @Column(name = "password")
+    @Size(min = 2, message = "Password should be at least 2 characters")
     private String password;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @Size(min = 1, message = "At least one role should be selected")
     private Set<Role> roles;
 
     public User() {}
@@ -90,6 +101,10 @@ public class User implements UserDetails, Comparable<User> {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Set<Role> getRoles() {

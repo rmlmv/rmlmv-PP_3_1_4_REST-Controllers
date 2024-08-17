@@ -9,12 +9,19 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
     }
 
     public User findByEmail(String email) {
@@ -25,11 +32,22 @@ public class UserService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         UserDetails userDetails = userRepository.findByEmail(email);
+
         if (userDetails == null) {
             throw new UsernameNotFoundException(String.format("User with email %s not found", email));
         }
+
         Hibernate.initialize(userDetails.getAuthorities());
 
         return userDetails;
+    }
+
+    public List<User> findAllWithRoles() {
+        return userRepository.findAllWithRoles();
+    }
+
+    @Transactional
+    public void save(User user) {
+        userRepository.save(user);
     }
 }

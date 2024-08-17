@@ -2,14 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
-    <title>User-info page</title>
+    <meta charset="UTF-8">
+    <title>Admin panel</title>
 </head>
 <body>
 
-<h2>User-info page</h2>
-</br>
+<h2>Admin panel</h2>
+<br>
 
 <table>
+
     <tr>
         <th>ID</th>
         <th>First Name</th>
@@ -17,9 +19,10 @@
         <th>Age</th>
         <th>Email</th>
         <th>Roles</th>
+        <th>Operations</th>
     </tr>
 
-    <tr>
+    <tr th:each="user : ${users}">
         <td th:text="${user.id}">ID</td>
         <td th:text="${user.firstName}">First Name</td>
         <td th:text="${user.lastName}">Last Name</td>
@@ -33,8 +36,18 @@
                 </span>
             </span>
         </td>
+        <td>
+            <input type="button" value="Update"
+                   th:attr="onclick=|window.location.href='@{/admin/edit-user(id=${user.id})}'|"/>
+            <input type="button" value="Delete"
+                   th:attr="onclick=|window.location.href='@{/admin/delete-user(id=${user.id})}'|"/>
+        </td>
     </tr>
+
 </table>
+<br>
+
+<input type="button" value="Add user" onclick="window.location.href='/admin/add-user'"/>
 
 </body>
 </html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add user</title>
+</head>
+<body>
+
+<h2>Add user</h2>
+<br>
+
+<form th:method="POST" th:action="@{/admin/save-user}" th:object="${user}">
+
+    <label for="first-name">First name:</label>
+    <input type="text" id="first-name" th:field="*{firstName}">
+    <div style="color:red" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">First name error</div>
+    <br><br>
+
+    <label for="last-name">Last name:</label>
+    <input type="text" id="last-name" th:field="*{lastName}">
+    <div style="color:red" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Last name error</div>
+    <br><br>
+
+    <label for="age">Age:</label>
+    <input type="text" id="age" th:field="*{age}">
+    <div style="color:red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age error</div>
+    <br><br>
+
+    <label for="email">Email:</label>
+    <input type="text" id="email" th:field="*{email}">
+    <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</div>
+    <br><br>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" th:field="*{password}">
+    <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</div>
+    <br><br>
+
+    <label for="roles">Roles:</label>
+    <select name="roles" id="roles" multiple="multiple" th:field="*{roles}">
+        <option th:each="role : ${roles}" th:value="${role.id}"
+                th:text="${#strings.startsWith(role.getName(), 'ROLE_') ? #strings.substring(role.getName(), 5)
+                                                                        : role.getName()}">
+
+            Role
+        </option>
+    </select>
+    <div style="color:red" th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">Roles error</div>
+    <br><br>
+
+    <input type="submit" value="Add"/>
+
+</form>
+
+</body>
+</html>
