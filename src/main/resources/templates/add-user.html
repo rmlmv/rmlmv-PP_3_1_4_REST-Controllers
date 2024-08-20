@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <meta charset="UTF-8">
     <title>Add user</title>
 </head>
+
 <body>
 
 <h2>Add user</h2>
@@ -22,7 +24,7 @@
     <br><br>
 
     <label for="age">Age:</label>
-    <input type="text" id="age" th:field="*{age}">
+    <input type="number" id="age" min="0" max="200" th:field="*{age}">
     <div style="color:red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age error</div>
     <br><br>
 
@@ -50,7 +52,13 @@
 
     <input type="submit" value="Add"/>
 
+    <div th:replace="fragments/general.html :: cancel-adm-op-button"></div>
+    <br><br>
+
 </form>
 
+<div th:replace="fragments/general.html :: logout-button"></div>
+
 </body>
+
 </html>

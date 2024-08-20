@@ -3,10 +3,7 @@ package ru.kata.spring.boot_security.demo.models;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
@@ -29,6 +26,7 @@ public class User implements UserDetails, Comparable<User> {
 
     @Column(name = "age")
     @Min(value = 0, message = "Age should be greater than 0")
+    @Max(value = 120, message = "Age should be less than 200")
     private int age;
 
     @Column(name = "email")

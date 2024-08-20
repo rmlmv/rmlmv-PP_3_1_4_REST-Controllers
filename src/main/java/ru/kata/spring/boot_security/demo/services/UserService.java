@@ -50,4 +50,9 @@ public class UserService implements UserDetailsService {
     public void save(User user) {
         userRepository.save(user);
     }
+
+    @Transactional
+    public void deleteById(Long id) {
+        userRepository.deleteById(id);
+    }
 }

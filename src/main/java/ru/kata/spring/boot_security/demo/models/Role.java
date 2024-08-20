@@ -66,13 +66,13 @@ public class Role implements GrantedAuthority, Comparable<Role> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Role role = (Role) o;
-        return Objects.equals(id, role.id);
+        Role other = (Role) o;
+        return Objects.equals(id, other.id) && name.equals(other.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, name);
     }
 
     @Override

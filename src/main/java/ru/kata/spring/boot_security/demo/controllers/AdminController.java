@@ -50,27 +50,27 @@ public class AdminController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("roles", roleService.findAll());
             return "add-user";
-        } else {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            userService.save(user);
-            return "redirect:/admin";
         }
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userService.save(user);
+        return "redirect:/admin";
     }
 
     @GetMapping("/edit-user")
     public String getEditUserPage(@RequestParam(name = "id") Long id,
-                                  @ModelAttribute(name = "name") User user,
+                                  @ModelAttribute(name = "user") User user,
                                   Model model) {
 
         Optional<User> optionalUser = userService.findById(id);
 
-        if (optionalUser.isPresent()) {
-            model.addAttribute("user", optionalUser.get());
-            model.addAttribute("roles", roleService.findAll());
-            return "edit-user";
-        } else {
+        if (optionalUser.isEmpty()) {
             return "redirect:/admin";
         }
+
+        model.addAttribute("user", optionalUser.get());
+        model.addAttribute("roles", roleService.findAll());
+        return "edit-user";
     }
 
     @PostMapping("/update-user")
@@ -84,12 +84,30 @@ public class AdminController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("roles", roleService.findAll());
             return "edit-user";
-        } else {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            userService.save(user);
-            return "redirect:/admin";
         }
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userService.save(user);
+        return "redirect:/admin";
     }
 
+    @GetMapping("/delete-user")
+    public String getDeleteUserPage(@RequestParam(name = "id") Long id,
+                                    Model model) {
 
+        Optional<User> optionalUser = userService.findById(id);
+
+        if (optionalUser.isEmpty()) {
+            return "redirect:/admin";
+        }
+
+        model.addAttribute("user", optionalUser.get());
+        return "delete-user";
+    }
+
+    @GetMapping("/remove-user")
+    public String removeUser(@RequestParam(name = "id") Long id) {
+        userService.deleteById(id);
+        return "redirect:/admin";
+    }
 }

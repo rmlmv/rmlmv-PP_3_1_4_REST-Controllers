@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <meta charset="UTF-8">
     <title>Edit user</title>
 </head>
+
 <body>
 
 <h2>Edit user</h2>
@@ -11,11 +13,11 @@
 
 <form th:method="POST" th:action="@{/admin/update-user}" th:object="${user}">
 
+    <input type="hidden" id="id" name="id" th:field="*{id}">
+
     <label for="id-span">ID:</label>
     <span id="id-span" th:text="*{id}">User ID</span>
     <br><br>
-
-    <input type="hidden" id="id" name="id" th:field="*{id}">
 
     <label for="first-name">First name:</label>
     <input type="text" id="first-name" th:field="*{firstName}">
@@ -28,7 +30,7 @@
     <br><br>
 
     <label for="age">Age:</label>
-    <input type="text" id="age" th:field="*{age}">
+    <input type="number" id="age" min="0" max="200" th:field="*{age}">
     <div style="color:red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age error</div>
     <br><br>
 
@@ -57,7 +59,13 @@
 
     <input type="submit" value="Update"/>
 
+    <div th:replace="fragments/general.html :: cancel-adm-op-button"></div>
+
 </form>
+<br>
+
+<div th:replace="fragments/general.html :: logout-button"></div>
 
 </body>
+
 </html>

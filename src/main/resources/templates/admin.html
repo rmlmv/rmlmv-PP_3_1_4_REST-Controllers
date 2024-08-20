@@ -5,7 +5,10 @@
     <meta charset="UTF-8">
     <title>Admin panel</title>
 </head>
+
 <body>
+
+<div th:replace="fragments/general.html :: role-switch-buttons"></div>
 
 <h2>Admin panel</h2>
 <br>
@@ -48,6 +51,10 @@
 <br>
 
 <input type="button" value="Add user" onclick="window.location.href='/admin/add-user'"/>
+<br><br>
+
+<div th:replace="fragments/general.html :: logout-button"></div>
 
 </body>
+
 </html>

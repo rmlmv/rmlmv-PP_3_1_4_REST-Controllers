@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+
+<input th:fragment="cancel-adm-op-button"
+       type="button" value="Cancel" th:attr="onclick=|window.location.href='/admin'|"/>
+
+<div th:fragment="role-switch-buttons">
+    <input type=button value="User" th:attr="onclick=|window.location.href='/user'|"/>
+    <input sec:authorize="hasRole('ADMIN')"
+           type=button value="Admin" th:attr="onclick=|window.location.href='/admin'|"/>
+    <hr>
+</div>
+
+<div th:fragment="logout-button">
+    <hr>
+    <input type=button value="Logout" th:attr="onclick=|window.location.href='/logout'|"/>
+</div>
+
+</body>
+
+</html>
