@@ -1,6 +1,5 @@
 package ru.kata.spring.boot_security.demo.controllers;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,13 +17,11 @@ public class AdminController {
     private final UserService userService;
     private final RoleService roleService;
     private final UserValidator userValidator;
-    private final PasswordEncoder passwordEncoder;
 
-    public AdminController(UserService userService, RoleService roleService, UserValidator userValidator, PasswordEncoder passwordEncoder) {
+    public AdminController(UserService userService, RoleService roleService, UserValidator userValidator) {
         this.userService = userService;
         this.roleService = roleService;
         this.userValidator = userValidator;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping()
@@ -52,14 +49,12 @@ public class AdminController {
             return "add-user";
         }
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.save(user);
         return "redirect:/admin";
     }
 
     @GetMapping("/edit-user")
     public String getEditUserPage(@RequestParam(name = "id") Long id,
-                                  @ModelAttribute(name = "user") User user,
                                   Model model) {
 
         Optional<User> optionalUser = userService.findById(id);
@@ -86,7 +81,6 @@ public class AdminController {
             return "edit-user";
         }
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.save(user);
         return "redirect:/admin";
     }
