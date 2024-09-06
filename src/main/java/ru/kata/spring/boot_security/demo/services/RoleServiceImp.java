@@ -3,7 +3,9 @@ package ru.kata.spring.boot_security.demo.services;
 import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.dao.RoleDao;
 import ru.kata.spring.boot_security.demo.models.Role;
+
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RoleServiceImp implements RoleService {
@@ -16,5 +18,10 @@ public class RoleServiceImp implements RoleService {
     @Override
     public List<Role> findAll() {
         return roleDao.findAll();
+    }
+
+    @Override
+    public Optional<Role> findById(int id) {
+        return roleDao.findById(id);
     }
 }
