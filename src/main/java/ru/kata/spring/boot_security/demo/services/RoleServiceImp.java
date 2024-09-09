@@ -24,4 +24,11 @@ public class RoleServiceImp implements RoleService {
     public Optional<Role> findById(int id) {
         return roleDao.findById(id);
     }
+
+    @Override
+    public void save(Role role) {
+        if (roleDao.findAll().stream().noneMatch((existingRole) -> role.getName().equals(existingRole.getName()))) {
+            roleDao.save(role);
+        }
+    }
 }

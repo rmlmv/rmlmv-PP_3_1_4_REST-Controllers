@@ -9,4 +9,6 @@ public interface RoleDao {
     List<Role> findAll();
 
     Optional<Role> findById(int id);
+
+    void save(Role role);
 }

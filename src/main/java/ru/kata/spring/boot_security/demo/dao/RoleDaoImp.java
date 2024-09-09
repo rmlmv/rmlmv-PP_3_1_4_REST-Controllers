@@ -25,4 +25,9 @@ public class RoleDaoImp implements RoleDao{
     public Optional<Role> findById(int id) {
         return Optional.ofNullable(entityManager.find(Role.class, id));
     }
+
+    @Override
+    public void save(Role role) {
+        entityManager.persist(role);
+    }
 }
