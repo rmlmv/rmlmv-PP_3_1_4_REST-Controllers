@@ -24,5 +24,5 @@ public interface UserService {
     @Transactional
     void deleteById(Long id);
 
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException;
+    UserDetails loadUserByUsername(String email) throws UsernameNotFoundException;
 }
