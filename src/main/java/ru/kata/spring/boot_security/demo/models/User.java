@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
@@ -38,6 +39,7 @@ public class User implements UserDetails, Comparable<User> {
     @Size(min = 2, message = "Password should be at least 2 characters")
     private String password;
 
+    @JsonManagedReference
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
