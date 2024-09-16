@@ -32,6 +32,7 @@ public class UsersController {
     }
 
     @GetMapping()
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserDto>> findAllWithRoles() {
         List<UserDto> userDtoList = userService.findAllWithRoles().stream()
                 .map(userMapper::convertToUserDto).collect(Collectors.toList());
@@ -48,6 +49,7 @@ public class UsersController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserDto> findById(@PathVariable("id") Long id) {
         Optional<User> optionalUser = userService.findById(id);
 
@@ -57,6 +59,7 @@ public class UsersController {
     }
 
     @PostMapping()
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponseDto> save(@RequestBody @Valid UserDto userDto,
                                                 BindingResult bindingResult) {
 
@@ -80,6 +83,7 @@ public class UsersController {
     }
 
     @PutMapping()
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponseDto> update(@RequestBody @Valid UserDto userDto,
                                                   BindingResult bindingResult) {
 
@@ -105,6 +109,7 @@ public class UsersController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteById(@PathVariable("id") Long id) {
         if (userService.findById(id).isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
