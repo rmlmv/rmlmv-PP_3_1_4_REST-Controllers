@@ -64,35 +64,10 @@
                                                 <th>Delete</th>
                                             </tr>
                                             </thead>
-                                            <tbody>
-                                            <tr th:each="user : ${users}">
-                                                <td class="user-id" th:text="${user.id}">ID</td>
-                                                <td class="user-first-name" th:text="${user.firstName}">First Name</td>
-                                                <td class="user-last-name" th:text="${user.lastName}">Last Name</td>
-                                                <td class="user-age" th:text="${user.age}">Age</td>
-                                                <td class="user-email" th:text="${user.email}">Email</td>
-                                                <input class="user-password" type="hidden" th:value="${user.password}"/>
-                                                <td>
-                                                    <span class="user-roles" th:each="role : ${user.roles}">
-                                                        <span th:text="${#strings.startsWith(role.name, 'ROLE_') ? #strings.substring(role.name, 5)
-                                                                                                                 : role.name}">
-                                                            Role
-                                                        </span>
-                                                    </span>
-                                                </td>
-                                                <td>
+                                            <tbody id="tbody">
 
-                                                    <!-- Update button -->
-                                                    <button type="button" class="btn btn-primary btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#upd-user-modal">
-                                                        Update
-                                                    </button>
-                                                </td>
-                                                <td>
-                                                    <button type="button" class="btn btn-danger btn-sm delete-btn" data-bs-toggle="modal" data-bs-target="#del-user-modal">
-                                                        Delete
-                                                    </button>
-                                                </td>
-                                            </tr>
+                                                <!-- Script generated data -->
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -120,45 +95,42 @@
             </div>
             <div class="modal-body">
 
-                <form id="upd-form" th:method="POST" th:action="@{/admin/update-user}" th:object="${user}">
+                <form id="upd-form" class="upd-form">
                     <div class="row">
                         <div class="col-md-3"></div>
                         <div class="col-md-6 text-center fw-bold">
-                            <input type="hidden" id="has-errors" th:value="${#fields.hasErrors('*')}">
                             <div class="form-group mb-3">
                                 <label for="id-upd" class="form-label">ID</label>
-                                <input type="text" class="form-control" id="id-upd"  th:field="*{id}" readonly>
+                                <input type="text" class="form-control id" id="id-upd" readonly>
                             </div>
                             <div class="mb-3">
                                 <label for="first-name-upd" class="form-label">First Name</label>
-                                <input type="text" class="form-control" id="first-name-upd" th:field="*{firstName}">
-                                <div class="alert alert-danger mt-2" role="alert" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">First name error</div>
+                                <input type="text" class="form-control firstName" id="first-name-upd">
+                                <div class="alert alert-danger mt-2 firstName" role="alert" style="display:none;">First name error</div>
                             </div>
                             <div class="mb-3">
                                 <label for="last-name-upd" class="form-label">Last Name</label>
-                                <input type="text" class="form-control" id="last-name-upd" th:field="*{lastName}">
-                                <div class="alert alert-danger mt-2" role="alert" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Last name error</div>
+                                <input type="text" class="form-control lastName" id="last-name-upd">
+                                <div class="alert alert-danger mt-2 lastName" role="alert" style="display:none;">Last name error</div>
                             </div>
                             <div class="mb-3">
                                 <label for="age-upd" class="form-label">Age</label>
-                                <input type="number" class="form-control" id="age-upd" th:field="*{age}"
-                                       min="0" max="200" step="1">
-                                <div class="alert alert-danger mt-2" role="alert" th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age error</div>
+                                <input type="number" class="form-control age" id="age-upd" min="0" max="200" step="1">
+                                <div class="alert alert-danger mt-2 age" role="alert" style="display:none;">Age error</div>
                             </div>
                             <div class="mb-3">
                                 <label for="email-upd" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email-upd" th:field="*{email}">
-                                <div class="alert alert-danger mt-2" role="alert" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</div>
+                                <input type="email" class="form-control email" id="email-upd">
+                                <div class="alert alert-danger mt-2 email" role="alert" style="display:none;">Email error</div>
                             </div>
                             <div class="mb-3">
                                 <label for="password-upd" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password-upd" th:field="*{password}">
-                                <input type="hidden" id="password-upd-val" th:if="${#fields.hasErrors('*')}" th:value="*{password}">
-                                <div class="alert alert-danger mt-2" role="alert" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</div>
+                                <input type="password" class="form-control password" id="password-upd">
+                                <div class="alert alert-danger mt-2 password" role="alert" style="display:none;">Password error</div>
                             </div>
                             <div class="mb-3">
                                 <label for="roles-upd" class="form-label">Roles</label>
-                                <select class="form-select" id="roles-upd" multiple="multiple" th:field="*{roles}">
+                                <select class="form-select" id="roles-upd" multiple="multiple">
                                     <option th:each="role : ${roles}"
                                             th:value="${role.id}"
                                             th:text="${#strings.startsWith(role.getName(), 'ROLE_') ? #strings.substring(role.getName(), 5)
@@ -167,7 +139,7 @@
                                         Role
                                     </option>
                                 </select>
-                                <div class="alert alert-danger mt-2" role="alert" th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}">Roles error</div>
+                                <div class="alert alert-danger mt-2 roles" role="alert" style="display:none;">Roles error</div>
                             </div>
                         </div>
                         <div class="col-md-3"></div>
@@ -175,7 +147,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary" form="upd-form">Update</button>
+                <button type="button" class="btn btn-primary" id="upd-btn">Update</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
@@ -195,34 +167,33 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="del-form" th:method="POST" th:action="@{/admin/remove-user}" th:object="${user}">
+                <form id="del-form" class="del-form">
                     <div class="row">
                         <div class="col-md-3"></div>
                         <div class="col-md-6 text-center fw-bold">
                             <div class="form-group mb-3">
                                 <label for="id-del" class="form-label">ID</label>
-                                <input type="text" class="form-control" id="id-del" th:field="*{id}" readonly>
+                                <input type="text" class="form-control id" id="id-del" readonly>
                             </div>
                             <div class="mb-3">
                                 <label for="first-name-del" class="form-label">First Name</label>
-                                <input type="text" class="form-control" id="first-name-del" th:field="*{firstName}" readonly>
+                                <input type="text" class="form-control firstName" id="first-name-del" readonly>
                             </div>
                             <div class="mb-3">
                                 <label for="last-name-del" class="form-label">Last Name</label>
-                                <input type="text" class="form-control" id="last-name-del" th:field="*{lastName}" readonly>
+                                <input type="text" class="form-control lastName" id="last-name-del" readonly>
                             </div>
                             <div class="mb-3">
                                 <label for="age-del" class="form-label">Age</label>
-                                <input type="number" class="form-control" id="age-del" th:field="*{age}"
-                                       min="0" max="200" step="1" readonly>
+                                <input type="number" class="form-control age" id="age-del" readonly>
                             </div>
                             <div class="mb-3">
                                 <label for="email-del" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email-del" th:field="*{email}" readonly>
+                                <input type="email" class="form-control email" id="email-del" readonly>
                             </div>
                             <div class="mb-3">
                                 <label for="roles-del" class="form-label">Roles</label>
-                                <select class="form-select" id="roles-del" multiple="multiple" th:field="*{roles}" readonly>
+                                <select class="form-select" id="roles-del" multiple="multiple" readonly>
                                     <option th:each="role : ${roles}"
                                             th:value="${role.id}"
                                             th:text="${#strings.startsWith(role.getName(), 'ROLE_') ? #strings.substring(role.getName(), 5)
@@ -238,22 +209,26 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-danger" form="del-form">Delete</button>
+                <button type="button" class="btn btn-danger" id="del-btn">Delete</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
 
-<script th:src="@{/updateModal.js}"></script>
-<script th:src="@{/deleteModal.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
         crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+
 <script src="http://localhost:35729/livereload.js"></script>
+
+<script th:src="@{/adminPage.js}"></script>
+<script th:src="@{/updateModal.js}"></script>
+<script th:src="@{/deleteModal.js}"></script>
 
 </body>
 </html>

@@ -1,23 +1,72 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const editButtons = document.querySelectorAll('.edit-btn');
+let updModal;
 
-    editButtons.forEach(function(button) {
-        button.addEventListener('click', function() {
-            const row = this.closest('tr');
+$(() => {
+        updModal = new bootstrap.Modal(document.getElementById('upd-user-modal'))
 
-            document.getElementById('id-upd').value = row.querySelector('.user-id').textContent;
-            document.getElementById('first-name-upd').value
-                    = row.querySelector('.user-first-name').textContent;
-            document.getElementById('last-name-upd').value = row.querySelector('.user-last-name').textContent;
-            document.getElementById('age-upd').value = row.querySelector('.user-age').textContent;
-            document.getElementById('email-upd').value = row.querySelector('.user-email').textContent;
-            document.getElementById('password-upd').value = row.querySelector('.user-password').value;
+        $(document).on('userTableLoaded', () => {
+            $('.edit-btn').each(function() {
+                $(this).click(function() {
+                    $('.upd-form .alert-danger').hide();
+
+                    transferUserDataToModal($(this), 'upd-form');
+                });
+            });
         });
+
+        $('#upd-btn').on('click', async () => {
+            $('.upd-form .alert-danger').hide();
+
+            const userToUpdate = buildUserJson();
+
+            const response = await fetch(apiUrl, {
+                method: "PUT",
+                body: JSON.stringify(userToUpdate),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                updateUserInTable((await response.json()).userDto);
+
+                updModal.hide();
+
+            } else {
+                const validationErrors = (await response.json()).validationErrors;
+                if (validationErrors != null) {
+                    Object.entries(validationErrors).forEach(([field, message]) => {
+                        $(`.upd-form .alert-danger.${field}`).text(message).show();
+                    });
+                }
+            }
+        });
+    }
+);
+
+function buildUserJson() {
+    const user = {};
+
+    simpleUserFields.forEach((field) => user[field] = $(`.upd-form .form-control.${field}`).val());
+
+    user['roles'] = $('.upd-form option:selected').map(function () {
+        return { id: parseInt($(this).val()) };
+    }).get();
+
+    return user;
+}
+
+function updateUserInTable(updatedUser) {
+    const row = $(`#${updatedUser.id}`);
+
+    simpleUserFields.forEach(field => {
+        row.find(`.${field}`).text(updatedUser[field]);
     });
 
-    if (document.getElementById('has-errors').value === 'true') {
-        document.getElementById('password-upd').value
-                = document.getElementById('password-upd-val').value;
-        new bootstrap.Modal(document.getElementById('upd-user-modal')).show();
-    }
-});
+    row.find('.roles').text(
+        updatedUser.roles.map(
+            role => role.name.startsWith('ROLE_')
+                ? role.name.substring(5)
+                : role.name
+        ).join(' ')
+    );
+}

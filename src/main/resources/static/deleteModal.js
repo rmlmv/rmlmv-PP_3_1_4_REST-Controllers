@@ -1,14 +1,26 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const deleteButtons = document.querySelectorAll('.delete-btn');
-    deleteButtons.forEach(function(button) {
-        button.addEventListener('click', function() {
-            const row = this.closest('tr');
+let delModal;
 
-            document.getElementById('id-del').value = row.querySelector('.user-id').textContent;
-            document.getElementById('first-name-del').value = row.querySelector('.user-first-name').textContent;
-            document.getElementById('last-name-del').value = row.querySelector('.user-last-name').textContent;
-            document.getElementById('age-del').value = row.querySelector('.user-age').textContent;
-            document.getElementById('email-del').value = row.querySelector('.user-email').textContent;
+$(() => {
+    delModal = new bootstrap.Modal(document.getElementById('del-user-modal'))
+
+    $(document).on('userTableLoaded', () => {
+        $('.delete-btn').each(function () {
+            $(this).click(function () {
+                transferUserDataToModal($(this), 'del-form');
+            });
         });
     });
-});
+
+    $('#del-btn').on('click', async  () => {
+
+        const userToDeleteId = $('.del-form .form-control.id').val();
+
+        const response = await fetch(`${apiUrl}/${userToDeleteId}`, { method: "DELETE" });
+
+        if (response.status === 204) {
+            $(`#${userToDeleteId}`).remove();
+        }
+
+        delModal.hide();
+    });
+})
