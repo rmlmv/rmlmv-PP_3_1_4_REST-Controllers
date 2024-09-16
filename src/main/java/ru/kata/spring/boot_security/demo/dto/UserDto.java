@@ -13,7 +13,7 @@ public class UserDto {
     private String lastName;
 
     @Min(value = 0, message = "Age should be greater than 0")
-    @Max(value = 120, message = "Age should be less than 200")
+    @Max(value = 200, message = "Age should be less than 200")
     private int age;
 
     @NotEmpty(message = "Email should not be empty")

@@ -27,7 +27,7 @@ public class User implements UserDetails, Comparable<User> {
 
     @Column(name = "age")
     @Min(value = 0, message = "Age should be greater than 0")
-    @Max(value = 120, message = "Age should be less than 200")
+    @Max(value = 200, message = "Age should be less than 200")
     private int age;
 
     @Column(name = "email")
