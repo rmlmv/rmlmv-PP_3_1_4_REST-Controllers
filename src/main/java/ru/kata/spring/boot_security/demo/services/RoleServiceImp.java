@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.services;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.dao.RoleDao;
 import ru.kata.spring.boot_security.demo.models.Role;
 
@@ -26,6 +27,7 @@ public class RoleServiceImp implements RoleService {
     }
 
     @Override
+    @Transactional
     public void save(Role role) {
         if (roleDao.findAll().stream().noneMatch((existingRole) -> role.getName().equals(existingRole.getName()))) {
             roleDao.save(role);

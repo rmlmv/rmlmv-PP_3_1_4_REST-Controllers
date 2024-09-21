@@ -13,7 +13,7 @@ import java.util.Optional;
 public class RoleDaoImp implements RoleDao{
 
     @PersistenceContext
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Override
     public List<Role> findAll() {
