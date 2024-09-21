@@ -1,8 +1,7 @@
-package ru.kata.spring.boot_security.demo.api;
+package ru.kata.spring.boot_security.demo.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.dto.UserDto;
@@ -32,7 +31,6 @@ public class UsersController {
     }
 
     @GetMapping()
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserDto>> findAllWithRoles() {
         List<UserDto> userDtoList = userService.findAllWithRoles().stream()
                 .map(userMapper::convertToUserDto).collect(Collectors.toList());
@@ -43,13 +41,11 @@ public class UsersController {
     }
 
     @GetMapping("/me")
-    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<UserDto> findBySelf(Principal principal) {
         return ResponseEntity.ok(userMapper.convertToUserDto(userService.findByEmail(principal.getName())));
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserDto> findById(@PathVariable("id") Long id) {
         Optional<User> optionalUser = userService.findById(id);
 
@@ -59,7 +55,6 @@ public class UsersController {
     }
 
     @PostMapping()
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponseDto> save(@RequestBody @Valid UserDto userDto,
                                                 BindingResult bindingResult) {
 
@@ -83,7 +78,6 @@ public class UsersController {
     }
 
     @PutMapping()
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponseDto> update(@RequestBody @Valid UserDto userDto,
                                                   BindingResult bindingResult) {
 
@@ -109,7 +103,6 @@ public class UsersController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteById(@PathVariable("id") Long id) {
         if (userService.findById(id).isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

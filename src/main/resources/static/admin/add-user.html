@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,9 +11,20 @@
 
 <header>
 
-    <!-- Топбар  -->
-    <div th:replace="fragments/general :: top-bar"></div>
-
+    <!-- Navbar -->
+    <div id="top-bar">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+            <div class="container-fluid">
+                <!-- Left side -->
+                <a class="nav-link text-white fw-bold user-email" href="/user/user.html"></a>
+                <span class="navbar-text text-white ms-2 user-roles"> with roles: </span>
+                <!-- Right side -->
+                <div class="navbar-nav ms-auto">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </div>
+            </div>
+        </nav>
+    </div>
 </header>
 
 <main class="mt-5">
@@ -23,15 +33,45 @@
         <div class="row">
 
             <!-- Sidebar -->
-            <div th:replace="fragments/general :: side-bar"></div>
+            <div id="side-bar">
+                <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar vh-100 position-fixed">
+                    <div class="position-sticky pt-3">
+                        <ul class="nav nav-pills flex-column mb-auto">
+                            <li class="nav-item">
+                                <a href="/admin/admin.html" class="nav-link active" aria-current="page">Admin</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/user/user.html" class="nav-link link-bodyemphasis">User</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
 
             <!-- Main content -->
             <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4 offset-lg-2">
                 <div class="pt-3">
                     <h1>Admin panel</h1>
 
-                    <!-- Tab navigation-->
-                    <div th:replace="fragments/general :: nav-tabs"></div>
+                    <!-- Tab navigation -->
+                    <div id="nav-tabs">
+                        <ul class="nav nav-tabs mt-3" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="users-table-tab" href="/admin/admin.html" role="tab"
+                                   aria-controls="users-table" aria-selected="false"
+                                >
+                                    Users table
+                                </a>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link active" id="new-user-tab" href="/admin/add-user.html" role="tab"
+                                   aria-controls="new-user" aria-selected="true"
+                                >
+                                    New user
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
 
                     <!-- Tab content -->
                     <div class="tab-content" id="myTabContent">
@@ -75,14 +115,10 @@
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="roles-save" class="form-label roles">Roles</label>
-                                                    <select class="form-select" id="roles-save" multiple="multiple">
-                                                        <option th:each="role : ${roles}"
-                                                                th:value="${role.id}"
-                                                                th:text="${#strings.startsWith(role.getName(), 'ROLE_') ? #strings.substring(role.getName(), 5)
-                                                                                                            : role.getName()}"
-                                                        >
-                                                            Role
-                                                        </option>
+                                                    <select class="form-select roles" id="roles-save" multiple="multiple">
+
+                                                        <!-- Script-generated options for roles -->
+
                                                     </select>
                                                     <div class="alert alert-danger mt-2 roles" role="alert" style="display:none;">Roles error</div>
                                                 </div>
@@ -109,7 +145,7 @@ crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 <script src="http://localhost:35729/livereload.js"></script>
 
-<script th:src="@{/addUserPage.js}"></script>
+<script src=js/addUserPage.js></script>
 
 </body>
 </html>

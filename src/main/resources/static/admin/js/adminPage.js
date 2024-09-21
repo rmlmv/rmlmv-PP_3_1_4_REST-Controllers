@@ -1,19 +1,39 @@
-const apiUrl = '/api/users';
+const usersApiUrl = '/api/users';
+const rolesApiUrl = '/api/roles'
 const simpleUserFields = ['id', 'firstName', 'lastName', 'age', 'email', 'password'];
-let userTableLoadedEvent;
+let rolesList;
+
+let usersTableLoadedEvent;
+let rolesListLoadedEvent;
 
 $(async () => {
-        userTableLoadedEvent = new jQuery.Event('userTableLoaded')
+        usersTableLoadedEvent = new jQuery.Event('usersTableLoaded');
+        rolesListLoadedEvent = new jQuery.Event('rolesListLoaded');
 
-        let users = await findAllWithRoles(apiUrl);
+        const mePromise = fetchAndParseJson(`${usersApiUrl}/me`);
+        mePromise.then(me => {
+            $('#top-bar .user-email').text(me.email);
+            const rolesSpan = $('#top-bar .user-roles');
+            me.roles.forEach(role => rolesSpan.append(
+                ' ' + (role.name.startsWith('ROLE_') ? role.name.substring(5) : role.name)
+            ));
+        });
 
-        makeUsersTable(users);
-
-        $(document).trigger(userTableLoadedEvent);
+        const usersPromise = fetchAndParseJson(usersApiUrl);
+        usersPromise.then(users => {
+            makeUsersTable(users);
+            $(document).trigger(usersTableLoadedEvent);
+        });
+        
+        const rolesPromise = fetchAndParseJson(rolesApiUrl);
+        rolesPromise.then(roles => {
+            rolesList = roles;
+            $(document).trigger(rolesListLoadedEvent);
+        });
     }
 );
 
-async function findAllWithRoles(url) {
+async function fetchAndParseJson(url) {
     const response = await fetch(url);
 
     if (response.status < 400) {

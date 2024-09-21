@@ -3,7 +3,7 @@ let updModal;
 $(() => {
         updModal = new bootstrap.Modal(document.getElementById('upd-user-modal'))
 
-        $(document).on('userTableLoaded', () => {
+        $(document).on('usersTableLoaded', () => {
             $('.edit-btn').each(function() {
                 $(this).click(function() {
                     $('.upd-form .alert-danger').hide();
@@ -13,12 +13,24 @@ $(() => {
             });
         });
 
+        $(document).on('rolesListLoaded', () => {
+            const select = $('.upd-form .form-select.roles');
+            rolesList.forEach(
+                (role) =>
+                    select.append(
+                        $('<option>')
+                            .val(role.id)
+                            .text(role.name.startsWith('ROLE_') ? role.name.substring(5) : role.name)
+                    )
+            );
+        });
+
         $('#upd-btn').on('click', async () => {
             $('.upd-form .alert-danger').hide();
 
             const userToUpdate = buildUserJson();
 
-            const response = await fetch(apiUrl, {
+            const response = await fetch(usersApiUrl, {
                 method: "PUT",
                 body: JSON.stringify(userToUpdate),
                 headers: {
@@ -49,7 +61,10 @@ function buildUserJson() {
     simpleUserFields.forEach((field) => user[field] = $(`.upd-form .form-control.${field}`).val());
 
     user['roles'] = $('.upd-form option:selected').map(function () {
-        return { id: parseInt($(this).val()) };
+        return {
+            id: parseInt($(this).val()),
+            name: $(this).text()
+        };
     }).get();
 
     return user;

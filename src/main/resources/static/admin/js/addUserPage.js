@@ -1,7 +1,19 @@
-const apiUrl = '/api/users';
+const usersApiUrl = '/api/users';
+const rolesApiUrl = '/api/roles';
 const simpleUserFields = ['firstName', 'lastName', 'age', 'email', 'password'];
+let rolesList;
 
-$(() => {
+$(async () => {
+
+    const mePromise = fetchAndParseJson(`${usersApiUrl}/me`);
+    mePromise.then(me => {
+        $('#top-bar .user-email').text(me.email);
+        const rolesSpan = $('#top-bar .user-roles');
+        me.roles.forEach(role => rolesSpan.append(
+            ' ' + (role.name.startsWith('ROLE_') ? role.name.substring(5) : role.name)
+        ));
+    });
+
     $('#add-btn').on('click', async () => {
         $('.add-form .alert-danger').hide();
 
@@ -9,7 +21,7 @@ $(() => {
 
         console.log(userToAdd);
 
-        const response = await fetch(apiUrl, {
+        const response = await fetch(usersApiUrl, {
             method: "POST",
             body: JSON.stringify(userToAdd),
             headers: {
@@ -18,7 +30,7 @@ $(() => {
         });
 
         if (response.ok) {
-            window.location.href = '/admin';
+            window.location.href = '/admin/admin.html';
         } else {
             const validationErrors = (await response.json()).validationErrors;
             if (validationErrors != null) {
@@ -29,8 +41,19 @@ $(() => {
                 });
             }
         }
-
     });
+
+    rolesList = await fetchAndParseJson(rolesApiUrl);
+
+    const select = $('.add-form .form-select.roles');
+    rolesList.forEach(
+        (role) =>
+            select.append(
+                $('<option>')
+                    .val(role.id)
+                    .text(role.name.startsWith('ROLE_') ? role.name.substring(5) : role.name)
+            )
+    );
 })
 
 function buildUserJson() {
@@ -43,4 +66,15 @@ function buildUserJson() {
     }).get();
 
     return user;
+}
+
+async function fetchAndParseJson(url) {
+    const response = await fetch(url);
+
+    if (response.status < 400) {
+        return response.json();
+
+    } else {
+        alert("HTTP error: " + response.status);
+    }
 }
